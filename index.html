@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anneler Günü</title>
+
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+
+    /* Arka plan gradient + ışık */
+    background: radial-gradient(circle at 50% 80%, #ffd6e7, #fff);
+}
+
+/* Glow efektleri */
+.glow {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: pink;
+    filter: blur(120px);
+    opacity: 0.4;
+    border-radius: 50%;
+    animation: moveGlow 10s infinite alternate ease-in-out;
+}
+
+.glow:nth-child(1) { top: 10%; left: 10%; }
+.glow:nth-child(2) { bottom: 10%; right: 10%; }
+
+@keyframes moveGlow {
+    from { transform: translate(0,0);}
+    to { transform: translate(50px, -50px);}
+}
+
+/* Yazı kutusu */
+.message-box {
+    position: absolute;
+    top: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    padding: 20px 40px;
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(10px);
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* Yazı */
+.message {
+    font-size: 42px;
+    color: #d63384;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(255,100,150,0.4);
+}
+
+/* Bahçe */
+.garden {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 400px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-end;
+}
+
+  color
+
+/* Flower */
+.flower {
+    width: 140px;
+}
+
+/* Sap */
+.stem {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation: growStem 2.5s forwards;
+}
+
+@keyframes growStem {
+    to { stroke-dashoffset: 0; }
+}
+
+/* Yaprak */
+.leaf {
+    transform: scale(0);
+    opacity: 0;
+    animation: leafGrow 1s forwards, sway 3s infinite ease-in-out;
+}
+
+@keyframes leafGrow {
+    to { transform: scale(1); opacity:1;}
+}
+
+@keyframes sway {
+    0% { transform: rotate(0deg);}
+    50% { transform: rotate(4deg);}
+    100% { transform: rotate(0deg);}
+}
+
+/* Çiçek */
+.bloom {
+    transform: scale(0);
+    animation: bloom 1.2s cubic-bezier(.68,-0.6,.32,1.6) forwards;
+}
+
+@keyframes bloom {
+    70% { transform: scale(1.2);}
+    100% { transform: scale(1);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- Glow -->
+<div class="glow"></div>
+<div class="glow"></div>
+
+<!-- Yazı -->
+<div class="message-box">
+    <div class="message">
+        Anneler Günün Kutlu Olsun Annem 💖
+    </div>
+</div>
+
+<!-- Bahçe -->
+<div class="garden" id="garden"></div>
+
+<script>
+const garden = document.getElementById("garden");
+
+function createFlower(delay) {
+
+    const color = randomColor();
+
+    const el = document.createElement("div");
+    el.className = "flower";
+
+    el.innerHTML = `
+    <svg viewBox="0 0 100 200">
+
+        <path class="stem"
+        d="M50 200 C30 150, 70 120, 50 60"
+        stroke="#2e7d32"
+        stroke-width="4"
+        fill="none"
+        style="animation-delay:${delay}s"/>
+
+        <ellipse class="leaf"
+            cx="35" cy="130" rx="12" ry="6"
+            fill="#4caf50"
+            style="animation-delay:${delay+1}s"/>
+
+        <ellipse class="leaf"
+            cx="65" cy="110" rx="12" ry="6"
+            fill="#4caf50"
+            style="animation-delay:${delay+1.2}s"/>
+
+        <g class="bloom" style="animation-delay:${delay+1.8}s">
+            <circle cx="50" cy="50" r="8" fill="#ffd54f"/>
+            <circle cx="50" cy="30" r="12" fill="${color}"/>
+            <circle cx="30" cy="50" r="12" fill="${color}"/>
+            <circle cx="70" cy="50" r="12" fill="${color}"/>
+            <circle cx="50" cy="70" r="12" fill="${color}"/>
+        </g>
+
+    </svg>
+    `;
+
+    garden.appendChild(el);
+}
+
+function randomColor() {
+    const colors = ["#ff4d6d","#ff85a1","#ff99cc","#ffc2d1","#ff6f91"];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+for (let i = 0; i < 10; i++) {
+    createFlower(i * 0.4);
+}
+</script>
+
+</body>
+</html>
