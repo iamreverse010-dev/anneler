@@ -1,169 +1,106 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anneler Günü</title>
+    <meta charset="UTF-8">
+    <title>Canım Annem</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            /* Gece gökyüzü arka planı */
+            background: linear-gradient(to top, #1a0b2e, #000000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-<style>
-body {
-    margin: 0;
-    overflow: hidden;
-    background: radial-gradient(circle at bottom, #ffe6f0, #ffffff);
-    font-family: 'Segoe UI', sans-serif;
-}
+        h1 {
+            position: absolute;
+            top: 20%;
+            color: #fff;
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            font-size: 3rem;
+            text-shadow: 0 0 15px rgba(255, 105, 180, 0.8);
+            opacity: 0;
+            animation: fadeIn 3s forwards;
+            z-index: 100;
+        }
 
-/* Yazı */
-.message {
-    position: absolute;
-    top: 10%;
-    width: 100%;
-    text-align: center;
-    font-size: 52px;
-    color: #d63384;
-    font-weight: bold;
-    letter-spacing: 1px;
-    animation: fadeIn 2s ease;
-}
+        /* Yazının yavaşça belirmesi */
+        @keyframes fadeIn { to { opacity: 1; } }
 
-@keyframes fadeIn {
-    from {opacity:0; transform:translateY(-40px);}
-    to {opacity:1; transform:translateY(0);}
-}
+        /* Çiçeklerin genel yapısı */
+        .flower {
+            position: absolute;
+            bottom: 0; /* Tam ekranın altına yapışık */
+            transform-origin: bottom center;
+            opacity: 0;
+            /* Büyüme animasyonu bittiğinde ekranda kalması için "forwards" */
+            animation: grow 2.5s ease-out forwards;
+        }
 
-/* Bahçe */
-.garden {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 400px;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: flex-end;
-}
-
-/* Flower */
-.flower {
-    width: 140px;
-    height: 220px;
-}
-
-/* Sap çizimi */
-.stem {
-    stroke-dasharray: 300;
-    stroke-dashoffset: 300;
-    animation: growStem 2.5s cubic-bezier(.65,0,.35,1) forwards;
-}
-
-@keyframes growStem {
-    to { stroke-dashoffset: 0; }
-}
-
-/* Yaprak */
-.leaf {
-    transform-origin: center;
-    transform: scale(0);
-    opacity: 0;
-    animation: leafGrow 1s ease forwards, sway 3s ease-in-out infinite;
-}
-
-@keyframes leafGrow {
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-/* Hafif sallanma */
-@keyframes sway {
-    0% { transform: rotate(0deg) scale(1);}
-    50% { transform: rotate(3deg) scale(1);}
-    100% { transform: rotate(0deg) scale(1);}
-}
-
-/* Çiçek açma */
-.bloom {
-    transform-origin: center;
-    transform: scale(0);
-    animation: bloomOpen 1.2s cubic-bezier(.68,-0.6,.32,1.6) forwards;
-}
-
-@keyframes bloomOpen {
-    0% { transform: scale(0);}
-    70% { transform: scale(1.2);}
-    100% { transform: scale(1);}
-}
-</style>
+        /* Çiçeklerin alttan büyüme animasyonu */
+        @keyframes grow {
+            0% { transform: scale(0); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="message">
-    Anneler Günün Kutlu Olsun Annem 💖
-</div>
+    <h1>Canım Annem Anneler Günün Kutlu Olsun 🌸</h1>
 
-<div class="garden" id="garden"></div>
+    <script>
+        const maxFlowers = 35; // Tam 20 çiçek sınırı
+        let count = 0;
 
-<script>
-const garden = document.getElementById("garden");
+        function createFlower() {
+            if (count >= maxFlowers) return; // 20'ye ulaşınca dur
 
-function createFlower(delay) {
+            const flower = document.createElement('div');
+            flower.className = 'flower';
+            
+            // Çiçek boyunu ve ekranın neresinden çıkacağını rastgele belirle
+            const height = Math.floor(Math.random() * 200 + 250); // 250px - 450px arası boy
+            const xPos = Math.random() * 80 + 10; // Ekranın %10 ile %90'ı arasında bir yer
+            const delay = count * 0.3; // Her çiçek arasına 0.3 saniye gecikme koy
 
-    const color = randomColor();
+            flower.style.left = xPos + 'vw';
+            flower.style.animationDelay = delay + 's';
+            
+            // Rastgele güzel çiçek renkleri
+            const colors = ['#ff69b4', '#ff1493', '#ff85a2', '#ff4d6d', '#ffb3c1'];
+            const petalColor = colors[Math.floor(Math.random() * colors.length)];
 
-    const el = document.createElement("div");
-    el.className = "flower";
+            // SVG ile zarif çiçek tasarımı
+            flower.innerHTML = `
+                <svg width="80" height="${height}" viewBox="0 0 80 ${height}">
+                    <path d="M40,${height} Q40,${height/2} 40,40" stroke="#2d5a27" stroke-width="4" fill="none" />
+                    <path d="M40,${height-80} Q60,${height-100} 40,${height-120}" fill="#3d7a36" />
+                    <path d="M40,${height-60} Q20,${height-80} 40,${height-100}" fill="#3d7a36" />
+                    <g transform="translate(40,40)">
+                        ${Array.from({length: 8}).map((_, i) => 
+                            `<ellipse cx="0" cy="-15" rx="10" ry="20" fill="${petalColor}" transform="rotate(${i * 45})" opacity="0.9" />`
+                        ).join('')}
+                        <circle cx="0" cy="0" r="8" fill="#ffd700" />
+                    </g>
+                </svg>
+            `;
 
-    el.innerHTML = `
-    <svg viewBox="0 0 100 200">
+            document.body.appendChild(flower);
+            count++;
 
-        <!-- Sap -->
-        <path class="stem"
-        d="M50 200 C30 150, 70 120, 50 60"
-        stroke="#2e7d32"
-        stroke-width="4"
-        fill="none"
-        style="animation-delay:${delay}s"/>
+            // Eğer 20 olmadıysa 300 milisaniye sonra yeni çiçek üret
+            if (count < maxFlowers) {
+                setTimeout(createFlower, 300);
+            }
+        }
 
-        <!-- Yapraklar -->
-        <ellipse class="leaf"
-            cx="35" cy="130" rx="12" ry="6"
-            fill="#4caf50"
-            style="animation-delay:${delay+1}s"/>
-
-        <ellipse class="leaf"
-            cx="65" cy="110" rx="12" ry="6"
-            fill="#4caf50"
-            style="animation-delay:${delay+1.2}s"/>
-
-        <!-- Çiçek -->
-        <g class="bloom" style="animation-delay:${delay+1.8}s">
-
-            <circle cx="50" cy="50" r="8" fill="#ffd54f"/>
-
-            <circle cx="50" cy="30" r="12" fill="${color}"/>
-            <circle cx="30" cy="50" r="12" fill="${color}"/>
-            <circle cx="70" cy="50" r="12" fill="${color}"/>
-            <circle cx="50" cy="70" r="12" fill="${color}"/>
-
-        </g>
-
-    </svg>
-    `;
-
-    garden.appendChild(el);
-}
-
-function randomColor() {
-    const colors = ["#ff4d6d", "#ff85a1", "#ff99cc", "#ffc2d1", "#ff6f91"];
-    return colors[Math.floor(Math.random() * colors.length)];
-}
-
-// Sinematik sırayla büyüme
-for (let i = 0; i < 9; i++) {
-    createFlower(i * 0.5);
-}
-</script>
-
+        // Animasyonu başlat
+        createFlower();
+    </script>
 </body>
 </html>
